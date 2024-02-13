@@ -10,4 +10,4 @@ while counter <= n:
  
 print("1 到 %d 之和为: %d" % (n,sum))
 
-return 0 test
+return 0
