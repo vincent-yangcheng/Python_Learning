@@ -1,6 +1,6 @@
 # This first line is provided for you
 
-score_inout = input("Enter Score: ")
+score_input = input("Enter Score: ")
 score = float(score_input)
 
 if score < 0.0 or score > 1.0:
