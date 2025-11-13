@@ -46,6 +46,3 @@ if __name__ == '__main__':
     
     print(Clock.show())
 
-11
-
-if NameError = j
