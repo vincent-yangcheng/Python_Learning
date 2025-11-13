@@ -12,4 +12,3 @@ perimeter = 2 * math.pi * radius
 area = math.pi * radius ** 2
 print(f'{perimeter = :.4f}')  # 输出：perimeter = 34.56
 print(f'{area = :.4f}')       # 输出：area = 95.035
-T
