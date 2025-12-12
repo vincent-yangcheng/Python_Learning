@@ -5,6 +5,7 @@ Version: 1.2
 Author: Ethan
 """
 import math
+from modulefinder import test
 from re import T
 
 radius = float(input('请输入圆的半径: '))  # 输入: 5.5
