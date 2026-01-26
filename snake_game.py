@@ -1,5 +1,6 @@
 import pygame
 import random
+import os
 
 pygame.init()
 
@@ -19,7 +20,23 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("贪吃蛇游戏")
 clock = pygame.time.Clock()
 
-font = pygame.font.SysFont("arial", 24)
+def get_chinese_font(size):
+    font_paths = [
+        "/System/Library/Fonts/STHeiti Light.ttc",
+        "/System/Library/Fonts/STHeiti Medium.ttc",
+        "/System/Library/Fonts/PingFang.ttc",
+        "/Library/Fonts/Songti.ttc",
+    ]
+    for font_path in font_paths:
+        if os.path.exists(font_path):
+            try:
+                font = pygame.font.Font(font_path, size)
+                return font
+            except:
+                continue
+    return pygame.font.SysFont(None, size)
+
+font = get_chinese_font(24)
 
 class Snake:
     def __init__(self):
@@ -63,6 +80,61 @@ def draw_grid():
         pygame.draw.line(screen, (40, 40, 40), (x, 0), (x, HEIGHT))
     for y in range(0, HEIGHT, GRID_SIZE):
         pygame.draw.line(screen, (40, 40, 40), (0, y), (WIDTH, y))
+
+def draw_snake(snake):
+    for i, segment in enumerate(snake.body):
+        x = segment[0] * GRID_SIZE
+        y = segment[1] * GRID_SIZE
+        
+        if i == 0:
+            pygame.draw.circle(screen, GREEN, (x + GRID_SIZE // 2, y + GRID_SIZE // 2), GRID_SIZE // 2)
+            pygame.draw.circle(screen, (0, 100, 0), (x + GRID_SIZE // 2, y + GRID_SIZE // 2), GRID_SIZE // 2 - 2)
+            
+            eye_size = 3
+            eye_offset_x = 4
+            eye_offset_y = 4
+            
+            dx, dy = snake.direction
+            if dx == 1:
+                eye_offset_x = 6
+                eye_offset_y = 0
+            elif dx == -1:
+                eye_offset_x = -6
+                eye_offset_y = 0
+            elif dy == -1:
+                eye_offset_x = 0
+                eye_offset_y = -6
+            elif dy == 1:
+                eye_offset_x = 0
+                eye_offset_y = 6
+            
+            eye1_x = x + GRID_SIZE // 2 + eye_offset_x - eye_offset_y
+            eye1_y = y + GRID_SIZE // 2 + eye_offset_x + eye_offset_y
+            eye2_x = x + GRID_SIZE // 2 + eye_offset_x + eye_offset_y
+            eye2_y = y + GRID_SIZE // 2 + eye_offset_x - eye_offset_y
+            
+            if dx != 0 or dy != 0:
+                eye1_x = x + GRID_SIZE // 2 + eye_offset_x
+                eye1_y = y + GRID_SIZE // 2 + eye_offset_y
+                eye2_x = x + GRID_SIZE // 2 + eye_offset_x
+                eye2_y = y + GRID_SIZE // 2 - eye_offset_y
+            
+            pygame.draw.circle(screen, WHITE, (int(eye1_x), int(eye1_y)), eye_size)
+            pygame.draw.circle(screen, WHITE, (int(eye2_x), int(eye2_y)), eye_size)
+            pygame.draw.circle(screen, BLACK, (int(eye1_x), int(eye1_y)), eye_size - 1)
+            pygame.draw.circle(screen, BLACK, (int(eye2_x), int(eye2_y)), eye_size - 1)
+        else:
+            pygame.draw.circle(screen, DARK_GREEN, (x + GRID_SIZE // 2, y + GRID_SIZE // 2), GRID_SIZE // 2 - 2)
+            pygame.draw.circle(screen, (50, 200, 50), (x + GRID_SIZE // 2, y + GRID_SIZE // 2), GRID_SIZE // 2 - 4)
+
+def draw_bean(pos):
+    x = pos[0] * GRID_SIZE + GRID_SIZE // 2
+    y = pos[1] * GRID_SIZE + GRID_SIZE // 2
+    
+    pygame.draw.ellipse(screen, (180, 70, 70), (x - 6, y - 8, 12, 16))
+    pygame.draw.ellipse(screen, (220, 100, 100), (x - 4, y - 6, 8, 12))
+    
+    pygame.draw.line(screen, (140, 50, 50), (x - 2, y - 6), (x + 2, y + 6), 1)
 
 def main():
     snake = Snake()
@@ -123,29 +195,15 @@ def main():
                 while food in snake.body:
                     food = (random.randint(0, GRID_WIDTH - 1), random.randint(0, GRID_HEIGHT - 1))
             
-            for i, segment in enumerate(snake.body):
-                color = DARK_GREEN if i > 0 else GREEN
-                pygame.draw.rect(screen, color, 
-                               (segment[0] * GRID_SIZE, segment[1] * GRID_SIZE, 
-                                GRID_SIZE - 2, GRID_SIZE - 2), border_radius=4)
-            
-            pygame.draw.rect(screen, RED,
-                            (food[0] * GRID_SIZE, food[1] * GRID_SIZE,
-                             GRID_SIZE - 2, GRID_SIZE - 2), border_radius=4)
+            draw_snake(snake)
+            draw_bean(food)
             
             score_text = font.render(f"得分: {score}", True, WHITE)
             screen.blit(score_text, (10, 10))
         
         elif game_state == "gameover":
-            for i, segment in enumerate(snake.body):
-                color = DARK_GREEN if i > 0 else GREEN
-                pygame.draw.rect(screen, color, 
-                               (segment[0] * GRID_SIZE, segment[1] * GRID_SIZE, 
-                                GRID_SIZE - 2, GRID_SIZE - 2), border_radius=4)
-            
-            pygame.draw.rect(screen, RED,
-                            (food[0] * GRID_SIZE, food[1] * GRID_SIZE,
-                             GRID_SIZE - 2, GRID_SIZE - 2), border_radius=4)
+            draw_snake(snake)
+            draw_bean(food)
             
             gameover_text = font.render("Game Over", True, RED)
             final_score_text = font.render(f"最终得分: {score}", True, WHITE)
