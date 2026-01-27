@@ -218,7 +218,7 @@ def main():
             screen.blit(restart_text, restart_rect)
         
         pygame.display.flip()
-        clock.tick(10)
+        clock.tick(5)
 
 if __name__ == "__main__":
     main()
