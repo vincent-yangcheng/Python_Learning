@@ -1,0 +1,159 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.1.29",
+    "lastTouchedAt": "2026-01-31T12:04:38.074Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-01-31T12:04:38.065Z",
+    "lastRunVersion": "2026.1.29",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "agents": {
+    "defaults": {
+      "workspace": "/root/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      },
+      "models": {
+        "minimax/minimax-m2.1": {
+          "alias": "MiniMax Custom"
+        }
+      },
+      "model": {
+        "primary": "minimax/minimax-m2.1"
+      }
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto"
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "c8f4110b840ae50640ef14802105c3a0"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      },
+      "qqbot": {
+        "enabled": true
+      },
+      "dingtalk": {
+        "enabled": true
+      },
+      "wecom": {
+        "enabled": true
+      }
+    },
+    "installs": {
+      "feishu": {
+        "source": "archive",
+        "sourcePath": "/tmp/feishu.tgz",
+        "installPath": "/root/.openclaw/extensions/feishu",
+        "version": "1.1.0",
+        "installedAt": "2026-01-30T15:40:05.983Z"
+      },
+      "qqbot": {
+        "source": "archive",
+        "sourcePath": "/tmp/qqbot.tgz",
+        "installPath": "/root/.openclaw/extensions/qqbot",
+        "version": "1.2.3",
+        "installedAt": "2026-01-30T15:40:41.806Z"
+      },
+      "dingtalk": {
+        "source": "archive",
+        "sourcePath": "/tmp/dingtalk.tgz",
+        "installPath": "/root/.openclaw/extensions/dingtalk",
+        "version": "0.2.0",
+        "installedAt": "2026-01-30T15:41:16.245Z"
+      },
+      "wecom": {
+        "source": "archive",
+        "sourcePath": "/tmp/wecom-latest.tgz",
+        "installPath": "/root/.openclaw/extensions/wecom",
+        "version": "2026.1.30",
+        "installedAt": "2026-01-30T15:42:20.241Z"
+      }
+    }
+  },
+  "auth": {
+    "profiles": {
+      "minimax:default": {
+        "provider": "minimax"
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "minimax": {
+        "baseUrl": "https://v1.cdks.work/v1",
+        "models": [
+          {
+            "id": "minimax-m2.1",
+            "name": "MiniMax M2.1 (Custom)",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 15,
+              "output": 60,
+              "cacheRead": 2,
+              "cacheWrite": 10
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "channels": {
+    "qqbot": {
+      "enabled": true,
+      "appId": "102833582",
+      "clientSecret": "lyBPet8OevCUm5Oi2Ni4Qm9WuIh6WwNo"
+    }
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "boot-md": {
+          "enabled": true
+        },
+        "command-logger": {
+          "enabled": true
+        },
+        "session-memory": {
+          "enabled": true
+        }
+      }
+    }
+  }
+}
